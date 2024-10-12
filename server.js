@@ -5,14 +5,18 @@ const connectDB = require("./utils/db");
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
 
-const employeesRoutes = require('./routes/emp/employees'); // Import employee routes
-const userRoutes = require('./routes/user/user'); // Import user routes
+const employeesRoutes = require('./routes/emp/employees'); 
+const userRoutes = require('./routes/user/user'); 
 
 app.use(express.json());
 app.use(cors());
 
 // Connect to the database
 connectDB();
+
+app.get('/', (req, res) => {
+    res.send('Welcome to My API!'); 
+});
 
 app.use('/api/v1/emp', employeesRoutes); 
 app.use('/api/v1/user', userRoutes); 

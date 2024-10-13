@@ -4,24 +4,30 @@ const Employee = require('../../models/employeeModel');
 const connectDB = require('../../utils/db');
 const { check, validationResult } = require('express-validator');
 
-connectDB(); 
- // post method for creating a employee
+connectDB();
+
 router.post('/employees', async (req, res) => {
     try {
-        
-        const newEmployee = await Employee.create(req.body); 
-       
-        res.status(201).json({ 
+        const newEmployee = await Employee.create(req.body);
+
+        res.status(201).json({
             success: true,
             message: 'Employee created successfully.',
             employee_id: newEmployee._id.toString()
-            
         });
 
     } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
+        if (error.code === 11000) {
+            res.status(400).json({
+                success: false,
+                message: 'Employee with this email already exists.'
+            });
+        } else {
+            res.status(500).json({
+                success: false,
+                message: error.message
+            });
+        }
     }
 });
 
